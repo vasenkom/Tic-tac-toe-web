@@ -16,7 +16,7 @@ function BotTurn () {
     do {
         botChoice = Math.floor(Math.random() * 9);
     } while (Gameboard[botChoice] !== ''); 
-    
+
     Gameboard[botChoice] += 'O';
     return {botChoice}
 }
