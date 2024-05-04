@@ -2,7 +2,7 @@ const Gameboard = [ '', '', '', '', '', '', '', '', ''];
 console.log(Gameboard);
 
 function userTurn () {
-    userChoice = window.prompt();
+    let userChoice = window.prompt();
     console.log(userChoice);
     if (Gameboard[userChoice] == '') {
         Gameboard[userChoice] += 'X'
