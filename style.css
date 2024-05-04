@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -25,6 +24,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+}
+.board > div:hover {
+    background-color: rgb(214, 147, 169);
+}
+.board > div span {
+    visibility: hidden;
 }
 .left-top {
     border-radius: 20px 0 0 0;
@@ -39,11 +45,7 @@ body {
     border-radius: 0 0 20px 0;
 }
 .board div p {
-    visibility: hidden;
     color: white;
     font-size: 40px;
     font-weight: 900;
-}
-.board div:hover p {
-    visibility: visible;
 }
