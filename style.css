@@ -1,0 +1,49 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Mandali", Arial, sans-serif;;
+}
+body {
+    background-color: rgb(254, 225, 229);
+}
+.board {
+    width: 320px;
+    height: 320px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 120px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.board > div {
+    width: 100px;
+    height: 100px;
+    background-color: palevioletred;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.left-top {
+    border-radius: 20px 0 0 0;
+}
+.right-top {
+    border-radius: 0 20px 0 0;
+}
+.left-bottom {
+    border-radius: 0 0 0 20px;
+}
+.right-bottom {
+    border-radius: 0 0 20px 0;
+}
+.board div p {
+    visibility: hidden;
+    color: white;
+    font-size: 40px;
+    font-weight: 900;
+}
+.board div:hover p {
+    visibility: visible;
+}
