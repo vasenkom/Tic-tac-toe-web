@@ -8,13 +8,19 @@ body {
     background-color: rgb(254, 225, 229);
 }
 .playGround {
-    margin-top: 120px;
+    margin-top: 80px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.playGround h1 {
+    color: palevioletred;
+    font-size: 35px;
+    font-weight: 900;
+    margin-bottom: 25px;
 }
 .board {
     width: 320px;
@@ -58,5 +64,13 @@ body {
 .reset {
     margin-top: 20px;
     padding: 3px 7px;
-    
+    border: none;
+    background-color: transparent;
+    color: palevioletred;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.reset:hover {
+    color: pink;
 }
