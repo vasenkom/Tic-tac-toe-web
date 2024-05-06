@@ -1,9 +1,12 @@
 const buttons = document.querySelectorAll('#cell');
 const resetButton = document.querySelector('.reset');
+const userWinDialogWindow = document.querySelector("#userWinDialog");
+const botWinDialogWindow = document.querySelector("#botWinDialog");
+const tieDialogWindow = document.querySelector("#tieWinDialog");
 
 let Gameboard = [ '', '', '', '', '', '', '', '', ''];
-let firstPlayerTurn = true; // Declare firstPlayerTurn as a global variable
-let winnerCount = 0;
+let firstPlayerTurn = true;
+let winnerCount = 0; //max 1
 
 console.log(Gameboard); //debugging
 
@@ -24,7 +27,7 @@ buttons.forEach((button) => {
 
         userTurn(cellNumber);
         winChecker(); //check for win situations after user's turn
-        firstPlayerTurn = false;
+        firstPlayerTurn = false; 
         // if (firstPlayerTurn == false) {
         //     botTurn();
         //     winChecker(); //check for win situations after bot's turn
@@ -43,25 +46,27 @@ function userTurn (cellNumber) {
     }
 
     console.log('User: ' + Gameboard); //debugging
-    firstPlayerTurn = true; // Update firstPlayerTurn after user's turn
+    firstPlayerTurn = true; //update firstPlayerTurn after user's turn
     console.log('User' + firstPlayerTurn);
     return {userChoice}
 }
 
 function botTurn () {
     let botChoice;
-    firstPlayerTurn = false;
+    // firstPlayerTurn = false;
+
     //the numbers will be randomised until the free cell will be found
     do {
         botChoice = Math.floor(Math.random() * 9);
     } while (Gameboard[botChoice] !== ''); 
+
     Gameboard[botChoice] += 'O';
 
     buttons.forEach((button) => {
         const span = button.querySelector('span');
-        if (span.textContent == botChoice + 1) { // Add 1 to match button numbering
+        if (span.textContent == botChoice + 1) {
             //update the corresponding cell with 'O'
-            const addO = document.createElement('p');
+            const addO = document.createElement('p'); //X or O are added to p
             addO.textContent = 'O';
             addO.classList.add('addO');
             button.appendChild(addO);
@@ -76,28 +81,29 @@ function winChecker() {
     
     if (checkWin('X')) {
         console.log("User wins");
-        reset();
-        
+        // reset();
         window.alert('Yupi'); //debugging
-        return {winnerCount, firstPlayerTurn}; // Exit the function if there's a winner
+        userWinDialogWindow.showModal();
+        return {winnerCount, firstPlayerTurn};
     } else if (checkWin('O')) {
         console.log("Bot wins");
-        reset();
-        
+        // reset();
         window.alert('Eh'); //debugging
-        return {winnerCount, firstPlayerTurn}; // Exit the function if there's a winner
+        botWinDialogWindow.showModal();
+        return {winnerCount, firstPlayerTurn}; 
     }
     if ((!areEmptyCellsLeft()) && (winnerCount == 0)) {
         console.log("Tie");
-        reset();
+        // reset();
         firstPlayerTurn = true;
+        tieDialogWindow.showModal();
         return { winnerCount, firstPlayerTurn };
     }
     
-    // Call botTurn only if there's no winner yet and there are empty cells left
+    //call botTurn only if there's no winner yet and there are empty cells left
     if ((winnerCount == 0) && (areEmptyCellsLeft())) {
         botTurn();
-        firstPlayerTurn = true; // Reset firstPlayerTurn after bot's turn
+        firstPlayerTurn = true; //reset firstPlayerTurn after bot's turn
     }
     
     return {winnerCount};
@@ -135,14 +141,14 @@ resetButton.addEventListener('click', function () {
 function reset() {
     Gameboard = [ '', '', '', '', '', '', '', '', ''];
     buttons.forEach((button) => {
-        if (button.querySelector('.addO')) { // Check if addO exists
-            button.querySelector('.addO').remove(); // Remove the addO element
+        if (button.querySelector('.addO')) { //check if addO exists
+            button.querySelector('.addO').remove(); //remove the addO element
         }
-        if (button.querySelector('.addX')) { // Check if addX exists
-            button.querySelector('.addX').remove(); // Remove the addX element
+        if (button.querySelector('.addX')) { //check if addX exists
+            button.querySelector('.addX').remove(); //remove the addX element
         }
     });
-    firstPlayerTurn = true; // Reset firstPlayerTurn to true
-    winnerCount = 0; // Reset winnerCount
+    firstPlayerTurn = true;
+    winnerCount = 0;
     return { firstPlayerTurn, Gameboard, winnerCount };
 }
