@@ -1,8 +1,8 @@
 const buttons = document.querySelectorAll('#cell');
-const resetButton = document.querySelector('.reset');
+const resetButton = document.querySelectorAll('.reset');
 const userWinDialogWindow = document.querySelector("#userWinDialog");
 const botWinDialogWindow = document.querySelector("#botWinDialog");
-const tieDialogWindow = document.querySelector("#tieWinDialog");
+const tieDialogWindow = document.querySelector("#tieDialog");
 
 let Gameboard = [ '', '', '', '', '', '', '', '', ''];
 let firstPlayerTurn = true;
@@ -23,16 +23,17 @@ buttons.forEach((button) => {
         }
 
         let cellNumber = button.querySelector('span').textContent; //cell numbering is added to span which is hidden to user
-        console.log(cellNumber); //debugging
 
         userTurn(cellNumber);
         winChecker(); //check for win situations after user's turn
         firstPlayerTurn = false; 
-        // if (firstPlayerTurn == false) {
-        //     botTurn();
-        //     winChecker(); //check for win situations after bot's turn
-        //     firstPlayerTurn = true;
-        // }
+        
+        //call botTurn only if there's no winner yet and there are empty cells left
+        if ((winnerCount == 0) && (areEmptyCellsLeft())) {
+            botTurn();
+            firstPlayerTurn = true; //reset firstPlayerTurn after bot's turn
+            winChecker();
+        }
     })
 })
 
@@ -47,15 +48,13 @@ function userTurn (cellNumber) {
 
     console.log('User: ' + Gameboard); //debugging
     firstPlayerTurn = true; //update firstPlayerTurn after user's turn
-    console.log('User' + firstPlayerTurn);
+    console.log('User ' + firstPlayerTurn);
     return {userChoice}
 }
 
 function botTurn () {
     let botChoice;
-    // firstPlayerTurn = false;
 
-    //the numbers will be randomised until the free cell will be found
     do {
         botChoice = Math.floor(Math.random() * 9);
     } while (Gameboard[botChoice] !== ''); 
@@ -72,38 +71,28 @@ function botTurn () {
             button.appendChild(addO);
         }
     })
-    console.log('Bot' + firstPlayerTurn);
+
     console.log('Bot: ' + Gameboard); //debugging
 }
 
 function winChecker() {
     // Check for win or tie condition after each turn
-    
     if (checkWin('X')) {
-        console.log("User wins");
-        // reset();
-        window.alert('Yupi'); //debugging
+        winnerCount ++;
+        console.log("User wins"); //debugging
         userWinDialogWindow.showModal();
         return {winnerCount, firstPlayerTurn};
     } else if (checkWin('O')) {
-        console.log("Bot wins");
-        // reset();
-        window.alert('Eh'); //debugging
+        winnerCount ++;
+        console.log("Bot wins"); //debugging
         botWinDialogWindow.showModal();
         return {winnerCount, firstPlayerTurn}; 
     }
     if ((!areEmptyCellsLeft()) && (winnerCount == 0)) {
-        console.log("Tie");
-        // reset();
+        console.log("Tie"); //debugging
         firstPlayerTurn = true;
         tieDialogWindow.showModal();
         return { winnerCount, firstPlayerTurn };
-    }
-    
-    //call botTurn only if there's no winner yet and there are empty cells left
-    if ((winnerCount == 0) && (areEmptyCellsLeft())) {
-        botTurn();
-        firstPlayerTurn = true; //reset firstPlayerTurn after bot's turn
     }
     
     return {winnerCount};
@@ -134,8 +123,19 @@ function areEmptyCellsLeft() {
     return Gameboard.includes('');
 }
 
-resetButton.addEventListener('click', function () {
-    reset();
+resetButton.forEach((reseting) => {
+    reseting.addEventListener('click', function() {
+        reset()
+        if (userWinDialogWindow) {
+            userWinDialogWindow.close();
+        }
+        if (botWinDialogWindow) {
+            botWinDialogWindow.close();
+        }
+        if (tieDialogWindow) {
+            tieDialogWindow.close();
+        }
+    })
 })
 
 function reset() {
